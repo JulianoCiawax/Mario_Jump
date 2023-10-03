@@ -1,5 +1,7 @@
 const mario = document.querySelector('.mario')
 const pipe = document.querySelector('.pipe')
+let gameOverMusicPlayed = false;
+
 
 const start = document.querySelector('.start')
 const gameOver = document.querySelector('.game-over')
@@ -9,14 +11,23 @@ audioGameOver = new Audio('songs/audio_gameover.mp3')
 
 
 const startGame = () => {
-  pipe.classList.add('pipe-animation')
-  start.style.display = 'none'
+  // Hide the instruction
+  const instruction = document.querySelector('.instructions');
+  instruction.style.display = 'none';
 
-  // audio
-  audioStart.play()
+  // Start the game logic (e.g., animate the pipe)
+  pipe.classList.add('pipe-animation');
+
+  // Hide the start button
+  start.style.display = 'none';
+
+  // Play the background music
+  audioStart.play();
 }
 
 const restartGame = () => {
+  // Refresh or reload the page
+  location.reload();
   gameOver.style.display = 'none'
   pipe.style.left = ''
   pipe.style.right = '0'
@@ -59,7 +70,6 @@ const loop = () => {
       mario.src = 'img/game-over.png'
       mario.style.width = '80px'
       mario.style.marginLeft = '50px'
-
 
       function stopAudioStart() {
         audioStart.pause()

@@ -1,0 +1,11 @@
+<leaderboard>
+  <entry>
+    <name>Player 1</name>
+    <time>100</time>
+  </entry>
+  <entry>
+    <name>Player 2</name>
+    <time>120</time>
+  </entry>
+  <!-- Adicione mais entradas para os 10 melhores tempos -->
+</leaderboard>

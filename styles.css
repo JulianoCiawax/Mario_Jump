@@ -1,41 +1,59 @@
+/* Reset de estilos para todos os elementos */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-.game {
-  width: 100%;
-  height: 100vh;
-  border-bottom: 30px solid green;
-  margin: 0 auto;
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(#87ceeb, #e0f6ff);
-}
-
-button {
+/* Estilos comuns para botões */
+button,
+.start,
+/* Estilos para o botão "Reiniciar" */
+.restart {
+  /* Defina os estilos comuns para botões */
   background: green;
   color: white;
   font-weight: bold;
   font-size: 1.5rem;
   border: none;
   padding: 1rem;
-  position: absolute;
-  right: 50vw;
-  top: 50vh;
   cursor: pointer;
   z-index: 1;
+
+  /* Posicione o botão no centro dos 70% da tela */
+  position: absolute;
+  top: 50%; /* Coloca o topo do botão no meio da tela */
+  left: 50%; /* Coloca a esquerda do botão no meio da tela */
+  transform: translate(-50%, -50%); /* Centraliza horizontal e verticalmente */
 }
-button:hover {
+
+button:hover,
+.start:hover,
+.restart:hover {
   border: 2px solid green;
   background: none;
   color: green;
 }
 
+/* Estilos para o contêiner do jogo */
+.game,
 .game-over {
   width: 100%;
-  height: 100vh;
+  height: 70vh; /* O jogo ocupa 70% da altura da tela */
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(#87ceeb, #e0f6ff);
+}
+
+.game {
+  border-bottom: 30px solid green;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Estilos para o contêiner de game-over */
+.game-over {
   background: rgba(0, 0, 0, 0.322);
   display: none;
   align-items: center;
@@ -44,14 +62,18 @@ button:hover {
   position: fixed;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 100%; /* O contêiner de game-over cobre a tela inteira */
 }
+
 .game-over h1 {
   font-size: 3rem;
   color: red;
   text-align: center;
-  margin-top: 15rem;
+  margin-top: 10rem;
 }
 
+/* Estilos para os elementos de cano e Mario */
 .pipe {
   position: absolute;
   bottom: 0;
@@ -65,6 +87,7 @@ button:hover {
   bottom: 0;
 }
 
+/* Animação das nuvens */
 .clouds {
   width: 550px;
   position: absolute;
@@ -81,6 +104,7 @@ button:hover {
   }
 }
 
+/* Animação do cano */
 .pipe-animation {
   animation: pipe-animation 2s infinite linear;
 }
@@ -89,12 +113,37 @@ button:hover {
   from {
     right: -80px;
   }
-
   to {
     right: 100%;
   }
 }
 
+/* Adicionar estilos para a instrução */
+.instructions {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1.2rem;
+}
+
+/* Centralizar texto dentro da instrução */
+.instructions p {
+  text-align: center;
+  margin: 0;
+}
+
+/* Estilo para o contêiner de jogo inteiro (ajuste conforme necessário) */
+.game {
+  /* Estilos de .game existentes ... */
+  position: relative;
+}
+
+/* Animação de salto */
 .jump {
   animation: jump 800ms ease-out;
 }
@@ -103,20 +152,34 @@ button:hover {
   0% {
     bottom: 0;
   }
-
   40% {
     bottom: 200px;
   }
-
   50% {
     bottom: 200px;
   }
-
   60% {
     bottom: 200px;
   }
-
   100% {
     bottom: 0;
   }
+}
+
+/* Estilos responsivos adicionais, se necessário */
+@media screen and (max-width: 768px) {
+  /* Adicionar estilos responsivos aqui */
+}
+
+/* Centralizar os botões no meio dos 70% da tela */
+.button-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.button-container button {
+  display: block;
+  margin: 10px auto;
 }
