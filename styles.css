@@ -183,3 +183,64 @@ button:hover,
   display: block;
   margin: 10px auto;
 }
+/* O código CSS anterior permanece inalterado */
+
+/* Estilos para a entrada de nome do jogador */
+.user-input {
+  text-align: center;
+  margin: 20px;
+}
+
+.user-input input {
+  padding: 5px;
+  font-size: 1rem;
+}
+
+.user-input button {
+  padding: 5px 10px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* Estilos para a tabela de classificação */
+.ranking {
+  text-align: center;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table,
+th,
+td {
+  border: 1px solid #000;
+}
+
+th,
+td {
+  padding: 8px;
+}
+
+th {
+  background-color: #87ceeb;
+}
+
+/* Adicione mais estilos conforme necessário */
+/* Estilizar o cronômetro */
+.timer {
+  text-align: center;
+  font-size: 36px;
+  font-weight: bold;
+  color: white; /* Cor do texto */
+  background-color: green; /* Cor de fundo do cronômetro */
+  padding: 10px 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Sombra ao redor do cronômetro */
+  position: fixed; /* Fixar o cronômetro na tela */
+  top: 80px; /* Posição vertical na tela */
+  left: 50%; /* Centralizar horizontalmente */
+  transform: translateX(-50%); /* Centralizar horizontalmente */
+  z-index: 9999; /* Valor alto para estar sempre à frente */
+}
