@@ -1,36 +1,43 @@
 const mario = document.querySelector('.mario');
 const pipe = document.querySelector('.pipe');
-let gameOverMusicPlayed = false;
 let playerName = '';
 let startTime = 0;
 let endTime = 0;
 let bestTime = Infinity;
-let timerInterval; // Variável para armazenar o intervalo do cronômetro
+let timerInterval;
 
 const start = document.querySelector('.start');
 const gameOver = document.querySelector('.game-over');
 const playerNameInput = document.getElementById('playerName');
-const rankTableBody = document.getElementById('rankTableBody');
-const timerElement = document.getElementById('time'); // Elemento do cronômetro
+const timerElement = document.getElementById('time');
 
-audioStart = new Audio('songs/audio_theme.mp3');
-audioGameOver = new Audio('songs/audio_gameover.mp3');
+const audioStart = new Audio('songs/audio_theme.mp3');
+const audioGameOver = new Audio('songs/audio_gameover.mp3');
 
-const updateRanking = () => {
-  // Load existing ranking data from localStorage
-  const rankingData = JSON.parse(localStorage.getItem('ranking')) || [];
+function carregarRanking() {
+  try {
+    const rankingData = localStorage.getItem('ranking');
+    return JSON.parse(rankingData) || [];
+  } catch (error) {
+    console.error('Erro ao carregar o ranking:', error);
+    return [];
+  }
+}
 
-  // Add the current player's data to the ranking
-  rankingData.push({ name: playerName, time: bestTime });
+function salvarRanking(ranking) {
+  try {
+    localStorage.setItem('ranking', JSON.stringify(ranking));
+    console.log('Ranking salvo com sucesso.');
+  } catch (error) {
+    console.error('Erro ao salvar o ranking:', error);
+  }
+}
 
-  // Sort the ranking based on the best time (descending order)
-  rankingData.sort((a, b) => b.time - a.time); // Inverter a ordem
-
-  // Keep only the top 10 players
-  rankingData.splice(10);
-
-  // Update the HTML table
+function atualizarTabelaRanking() {
+  const rankingData = carregarRanking();
+  const rankTableBody = document.getElementById('rankTableBody'); // Certifique-se de que o ID corresponda à sua tabela HTML
   rankTableBody.innerHTML = '';
+
   rankingData.forEach((player, index) => {
     const row = document.createElement('tr');
     row.innerHTML = `
@@ -40,80 +47,65 @@ const updateRanking = () => {
     `;
     rankTableBody.appendChild(row);
   });
-
-  // Store the updated ranking data in localStorage
-  localStorage.setItem('ranking', JSON.stringify(rankingData));
 }
 
-const submitName = () => {
-  playerName = playerNameInput.value.trim(); // Remove espaços em branco do nome
+function updateRanking() {
+  const rankingData = carregarRanking();
+
+  rankingData.push({ name: playerName, time: bestTime });
+
+  rankingData.sort((a, b) => a.time - b.time);
+
+  if (rankingData.length > 10) {
+    rankingData.pop();
+  }
+
+  salvarRanking(rankingData);
+  atualizarTabelaRanking(); // Atualizar a tabela na interface com os dados atualizados
+}
+
+function submitName() {
+  playerName = playerNameInput.value.trim();
   if (playerName === '') {
     alert('Por favor, insira um nome válido.');
-    return; // Não permita nomes em branco
+    return;
   }
   playerNameInput.disabled = true;
   playerNameInput.style.display = 'none';
   document.querySelector('.user-input button').style.display = 'none';
 
-  // Iniciar o jogo após enviar o nome
   startGame();
 }
 
-const updateTimer = () => {
-  const currentTime = (Date.now() - startTime) / 1000; // Tempo decorrido em segundos
+function updateTimer() {
+  const currentTime = (Date.now() - startTime) / 1000;
   timerElement.textContent = currentTime.toFixed(2);
 }
 
-const startGame = () => {
-  // Verifique se o jogador inseriu um nome válido
+function startGame() {
   if (!playerName || playerName.trim() === '') {
     alert('Por favor, insira um nome antes de iniciar o jogo.');
-    return; // Não inicie o jogo se o nome estiver em branco
+    return;
   }
-  // Hide the instruction
   const instruction = document.querySelector('.instructions');
   instruction.style.display = 'none';
 
-  // Start the game logic (e.g., animate the pipe)
   pipe.classList.add('pipe-animation');
 
-  // Hide the start button
   start.style.display = 'none';
 
-  // Record the start time
   startTime = Date.now();
 
-  // Iniciar o cronômetro
-  timerInterval = setInterval(updateTimer, 10); // Atualiza o cronômetro a cada 10 milissegundos
+  timerInterval = setInterval(updateTimer, 10);
 
-  // Play the background music
   audioStart.play();
 }
 
-const restartGame = () => {
-  // Refresh or reload the page
+function restartGame() {
   location.reload();
-  gameOver.style.display = 'none';
-  pipe.style.left = '';
-  pipe.style.right = '0';
-  mario.src = 'img/mario.gif';
-  mario.style.width = '150px';
-  mario.style.bottom = '0';
-
-  start.style.display = 'none';
-
-  audioGameOver.pause();
-  audioGameOver.currentTime = 0;
-
-  audioStart.play();
-  audioStart.currentTime = 0;
-
-  // Parar o cronômetro e redefinir o tempo
-  clearInterval(timerInterval);
-  timerElement.textContent = '0.00';
 }
 
-const jump = () => {
+function jump() {
   mario.classList.add('jump');
 
   setTimeout(() => {
@@ -121,7 +113,7 @@ const jump = () => {
   }, 800);
 }
 
-const loop = () => {
+function loop() {
   setInterval(() => {
     const pipePosition = pipe.offsetLeft;
     const marioPosition = window
@@ -129,10 +121,10 @@ const loop = () => {
       .bottom.replace('px', ' ');
 
     if (pipePosition <= 120 && pipePosition > 0 && marioPosition < 80) {
-      pipe.classList.remove('.pipe-animation');
+      pipe.classList.remove('pipe-animation');
       pipe.style.left = `${pipePosition}px`;
 
-      mario.classList.remove('.jump');
+      mario.classList.remove('jump');
       mario.style.bottom = `${marioPosition}px`;
 
       mario.src = 'img/game-over.png';
@@ -153,7 +145,6 @@ const loop = () => {
 
       gameOver.style.display = 'flex';
 
-      // Record the end time and calculate the time elapsed
       endTime = Date.now();
       const currentTime = endTime - startTime;
 
@@ -162,7 +153,6 @@ const loop = () => {
         updateRanking();
       }
 
-      // Parar o cronômetro
       clearInterval(timerInterval);
     }
   }, 10);
