@@ -1,4 +1,4 @@
-# Mario_Jump
+# Juliano Costa - Mario`s Jump
 
 https://julianociawax.github.io/Mario_Jump/
 
