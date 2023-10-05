@@ -14,6 +14,15 @@ const timerElement = document.getElementById('time');
 const audioStart = new Audio('songs/audio_theme.mp3');
 const audioGameOver = new Audio('songs/audio_gameover.mp3');
 
+// Function to replay audio when it ends
+function replayAudio() {
+  audioStart.currentTime = 0; // Reset audio to the beginning
+  audioStart.play(); // Play the audio again
+}
+
+// Add an event listener to the "ended" event of the audio element
+audioStart.addEventListener('ended', replayAudio);
+
 function carregarRanking() {
   try {
     const rankingData = localStorage.getItem('ranking');
