@@ -54,7 +54,8 @@ function updateRanking() {
 
   rankingData.push({ name: playerName, time: bestTime });
 
-  rankingData.sort((a, b) => a.time - b.time);
+  // Inverta a ordem de classificação (maior tempo primeiro)
+  rankingData.sort((a, b) => b.time - a.time);
 
   if (rankingData.length > 10) {
     rankingData.pop();
