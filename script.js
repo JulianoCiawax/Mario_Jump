@@ -34,34 +34,48 @@ function salvarRanking(ranking) {
 }
 
 function atualizarTabelaRanking() {
-  const rankingData = carregarRanking();
-  const rankTableBody = document.getElementById('rankTableBody'); // Certifique-se de que o ID corresponda à sua tabela HTML
+  const rankTableBody = document.getElementById('rankTableBody');
   rankTableBody.innerHTML = '';
 
-  rankingData.forEach((player, index) => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${index + 1}</td>
-      <td>${player.name}</td>
-      <td>${(player.time / 1000).toFixed(2)} s</td>
-    `;
-    rankTableBody.appendChild(row);
-  });
+  // Solicitar os dados YAML do GitHub
+  fetch('https://raw.githubusercontent.com/JulianoCiawax/Mario_Jump/main/data.yml')
+    .then(response => response.text())
+    .then(data => {
+      // Analisar os dados YAML
+      const rankingData = jsyaml.load(data);
+
+      // Ordenar o rankingData com base no tempo (menor tempo primeiro)
+      rankingData.ranking.sort((a, b) => a.score - b.score);
+
+      rankingData.ranking.forEach((player, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${player.name}</td>
+          <td>${player.score}</td>
+        `;
+        rankTableBody.appendChild(row);
+      });
+    })
+    .catch(error => {
+      console.error('Erro ao carregar os dados YAML:', error);
+    });
 }
 
 function updateRanking() {
   const rankingData = carregarRanking();
 
-  rankingData.push({ name: playerName, time: bestTime });
+  rankingData.push({ name: playerName, score: bestTime });
 
-  rankingData.sort((a, b) => a.time - b.time);
+  // Ordenar o rankingData com base no tempo (menor tempo primeiro)
+  rankingData.sort((a, b) => a.score - b.score);
 
   if (rankingData.length > 10) {
     rankingData.pop();
   }
 
   salvarRanking(rankingData);
-  atualizarTabelaRanking(); // Atualizar a tabela na interface com os dados atualizados
+  atualizarTabelaRanking();
 }
 
 function submitName() {
@@ -158,6 +172,7 @@ function loop() {
   }, 10);
 }
 
+atualizarTabelaRanking(); // Chama a função para carregar e exibir o ranking ao carregar a página
 loop();
 
 document.addEventListener('keypress', (e) => {
