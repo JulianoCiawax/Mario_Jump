@@ -63,6 +63,22 @@ function updateRanking() {
 
   rankingData.push({ name: playerName, time: bestTime });
 
+  fetch('save_ranking.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ name: playerName, time: bestTime }),
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('Ranking atualizado com sucesso:', data);
+    atualizarTabelaRanking(); // Atualiza a tabela com os dados atualizados
+  })
+  .catch(error => {
+    console.error('Erro ao atualizar o ranking:', error);
+  });
+
   // Inverta a ordem de classificação (maior tempo primeiro)
   rankingData.sort((a, b) => b.time - a.time);
 
